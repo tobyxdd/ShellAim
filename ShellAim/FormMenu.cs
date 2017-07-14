@@ -44,7 +44,9 @@ namespace ShellAim
 
         private FormOverlay formOverlay = new FormOverlay();
 
-        private Color overlayColor = Color.LightGreen;
+        private Color[] overlayColors = { Color.LightPink, Color.LightGreen, Color.LightYellow };
+
+        private int overlayColorIndex = 1;
 
         private float screenRatioX, screenRatioY;
 
@@ -94,6 +96,8 @@ namespace ShellAim
             RegisterHotKey(Handle, 105, 0, (int)Keys.NumPad5);
             RegisterHotKey(Handle, 106, 0, (int)Keys.NumPad6);
             RegisterHotKey(Handle, 107, 0, (int)Keys.NumPad8);
+
+            RegisterHotKey(Handle, 108, 0, (int)Keys.NumPad0);
         }
 
         private void UnregisterFormHotkeys()
@@ -105,6 +109,7 @@ namespace ShellAim
             UnregisterHotKey(Handle, 105);
             UnregisterHotKey(Handle, 106);
             UnregisterHotKey(Handle, 107);
+            UnregisterHotKey(Handle, 108);
         }
 
         private void SetGameWindowForeground()
@@ -180,7 +185,13 @@ namespace ShellAim
                         if (velocity < 100) velocity++;
                         RefreshOverlay();
                         break;
-
+                    case 108:
+                        if (++overlayColorIndex >= overlayColors.Length)
+                        {
+                            overlayColorIndex = 0;
+                        }
+                        RefreshOverlay();
+                        break;
                 }
             }
         }
@@ -298,19 +309,25 @@ namespace ShellAim
                     }
                 }
 
-                graphics.DrawCurve(new Pen(overlayColor, 2), pointsNot);
+                graphics.DrawCurve(new Pen(overlayColors[overlayColorIndex], 2), pointsNot);
             }
             catch (Exception e)
             {
                 graphics.DrawString("Unable to render", new Font(Constants.OVERLAY_FONT, 12), Brushes.Red, 40, 100);
             }
 
-            graphics.FillEllipse(new SolidBrush(overlayColor), new Rectangle(playerX - 5, convertedY - 5, 10, 10));
+            Point endPoint = new Point((int)(playerX + Math.Cos(rad) * velocity * 2.2 * screenRatioX), (int)(convertedY - Math.Sin(rad) * velocity * 2.2 * screenRatioX));
+
+            graphics.DrawLine(new Pen(overlayColors[overlayColorIndex], 4),
+                new Point(playerX, convertedY), endPoint);
+
+            graphics.FillEllipse(new SolidBrush(overlayColors[overlayColorIndex]), new Rectangle(playerX - 5, convertedY - 5, 10, 10));
+            graphics.FillEllipse(new SolidBrush(overlayColors[overlayColorIndex]), new Rectangle(endPoint.X - 5, endPoint.Y - 5, 10, 10));
 
             StringFormat sf = new StringFormat();
             sf.Alignment = StringAlignment.Center;
 
-            graphics.DrawString(velocity + ", " + displayAngle, new Font(Constants.OVERLAY_FONT, 12), new SolidBrush(overlayColor), playerX, convertedY + 20, sf);
+            graphics.DrawString(velocity + ", " + displayAngle, new Font(Constants.OVERLAY_FONT, 14), new SolidBrush(overlayColors[overlayColorIndex]), formOverlay.Width / 2, 40, sf);
 
         }
 

@@ -59,7 +59,8 @@
             this.labelInfo.Size = new System.Drawing.Size(225, 157);
             this.labelInfo.TabIndex = 1;
             this.labelInfo.Text = "Ctrl+Tab - Toggle Help\r\nTab - Toggle On/Off\r\nRight Click - Set Player Position\r\nN" +
-    "umpad 2: Underground Shot\r\nNumpad 4,6: Angle\r\nNumpad 5,8: Velocity";
+    "umpad 2 - Underground Shot\r\nNumpad 4,6 - Angle\r\nNumpad 5,8 - Velocity\r\nNumpad 0 " +
+    "- Change Color";
             this.labelInfo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // buttonExit
