@@ -335,7 +335,8 @@ namespace ShellAim
         {
             if (formOverlay.Visible)
             {
-                if (GetForegroundWindow() != gameWindowHandle)
+                IntPtr foreground = GetForegroundWindow();
+                if (foreground != gameWindowHandle && foreground != formOverlay.Handle && foreground != Handle)
                 {
                     if (Utils.GetGameHandler() == IntPtr.Zero)
                     {
