@@ -114,7 +114,7 @@ namespace ShellAim
 
         private void SetGameWindowForeground()
         {
-            ShowWindow(gameWindowHandle, 4);
+            ShowWindow(gameWindowHandle, 3);
             SetForegroundWindow(gameWindowHandle);
         }
 
