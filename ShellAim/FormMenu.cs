@@ -21,6 +21,10 @@ namespace ShellAim
         private static extern bool GetWindowRect(IntPtr hwnd, out Rect lpRect);
         [DllImport("user32.dll", SetLastError = true)]
         private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+        [DllImport("user32.dll", EntryPoint = "GetWindowLong")]
+        public static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+        [DllImport("user32.dll", EntryPoint = "SetWindowLong")]
+        public static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
         [DllImport("user32.dll")]
         private static extern short GetAsyncKeyState(Keys vKey);
 
@@ -73,6 +77,11 @@ namespace ShellAim
             RegisterFormHotkeys();
 
             formOverlay.Paint += FormOverlay_Paint;
+
+            //click through
+            int windowLong = GetWindowLong(formOverlay.Handle, -20);
+            windowLong = windowLong | 0x80000 | 0x20;
+            SetWindowLong(formOverlay.Handle, -20, windowLong);
         }
 
         private void FormOverlay_Paint(object sender, PaintEventArgs e)
